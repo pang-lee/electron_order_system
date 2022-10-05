@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<title>Food Order</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
+.w3-bar-block .w3-bar-item {padding:20px}
+ul {list-style-type: none;}
+.btn {
+  background-color: white;
+  font-size: 12px;
+  border-radius: 50%;
+}
+
+.btn:hover{background-color: #e7e7e7;}
+</style>
+<body>
+
+<!-- Top menu -->
+<div class="w3-top">
+  <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
+    <div class="w3-center w3-padding-16">
+      <h1>Food List</h1>
+      <button class="w3-btn w3-medium w3-black fa fa-address-card" onclick="signup()">&nbsp;&nbsp;SignUp</button>
+      <button class="w3-btn w3-medium w3-sand fa fa-cart-plus" onclick="list()">&nbsp;&nbsp;Shopping Cart</button>
+    </div>
+  </div>
+  <div id="example"></div>
+</div>
+  
+<!-- !PAGE CONTENT! -->
+<div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+
+  <!-- First Photo Grid-->
+  <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+    <div class="w3-quarter">
+      <img src="img/hambu.jpg" alt="hambuger" style="width:100%">
+      <p>
+        <button class="w3-button w3-small w3-red fa fa-plus" id="hambuger" onclick="add(event)">&nbsp;&nbsp;Add</button>
+        <button class="w3-button w3-small w3-dark-grey fa fa-times" id="hambuger" onclick="del(event)">&nbsp;&nbsp;Delete</button>
+      </p>
+    </div>
+    <div class="w3-quarter">
+      <img src="img/franch.jpg" alt="franch-fry" style="width:100%">
+      <p>
+        <button class="w3-button w3-small w3-red fa fa-plus" id="franch-fry" onclick="add(event)">&nbsp;&nbsp;Add</button>
+        <button class="w3-button w3-small w3-dark-grey fa fa-times" id="franch-fry" onclick="del(event)">&nbsp;&nbsp;Delete</button>
+      </p>
+    </div>
+    <div class="w3-quarter">
+      <img src="img/sandwi.jpg" alt="Sandwich" style="width:100%">
+      <p>
+        <button class="w3-button w3-small w3-red fa fa-plus" id="sandwitch" onclick="add(event)">&nbsp;&nbsp;Add</button>
+        <button class="w3-button w3-small w3-dark-grey fa fa-times" id="sandwitch" onclick="del(event)">&nbsp;&nbsp;Delete</button>
+      </p>
+    </div>
+    <div class="w3-quarter">
+      <img src="img/black.jpg" alt="black-tea" style="width:100%">
+      <p>
+        <button class="w3-button w3-small w3-red fa fa-plus" id="black-tea" onclick="add(event)">&nbsp;&nbsp;Add</button>
+        <button class="w3-button w3-small w3-dark-grey fa fa-times" id="black-tea" onclick="del(event)">&nbsp;&nbsp;Delete</button>
+      </p>
+    </div>
+  </div>
+
+  <p id="demo"></p>
+  
+  <!-- Second Photo Grid-->
+  
+  <!--
+  <div class="w3-row-padding w3-padding-16 w3-center">
+    <div class="w3-quarter">
+      <img src="img/download.jpg" alt="Sandwich" style="width:100%">
+      <p>
+        <button class="w3-button w3-tiny w3-red" id="5-add" onclick="add(event)">Add</button>
+      </p>
+    </div>
+    <div class="w3-quarter">
+      <img src="img/download.jpg" alt="Sandwich" style="width:100%">
+      <p>
+        <button class="w3-button w3-tiny w3-red" id="6-add" onclick="add(event)">Add</button>
+      </p>
+    </div>
+    <div class="w3-quarter">
+      <img src="img/download.jpg" alt="Sandwich" style="width:100%">
+      <p>
+        <button class="w3-button w3-tiny w3-red" id="7-add" onclick="add(event)">Add</button>
+      </p>
+    </div>
+    <div class="w3-quarter">
+      <img src="img/download.jpg" alt="Sandwich" style="width:100%">
+      <p>
+        <button class="w3-button w3-tiny w3-red" id="8-add" onclick="add(event)">Add</button>
+      </p>
+    </div>
+  </div>
+  -->
+</div>
+
+
+<script>
+var cart = []
+
+var collectionRepeat = function(box, key){
+    var counter = {}
+  
+    box.forEach(function(x) { 
+        counter[x] = (counter[x] || 0) + 1
+    });
+  
+    var val = counter[key]
+ 
+    if (key === undefined) {
+        return counter;
+    }
+  
+    return (val) === undefined ? 0 : val
+}
+
+var amountPrice = function(category, amount){
+  switch(category){
+    case 'hambuger':
+      return 50 * amount
+      break
+    case 'franch-fry':
+      return 40 * amount
+      break
+    case 'sandwitch':
+      return 35 * amount
+      break
+    case 'black-tea':
+      return 20 * amount
+      break
+    default: break
+  }
+}
+
+function signup(){
+  Swal.fire({
+    title: 'SignUp',
+    icon: 'question',
+    html:`
+    <div class="w3-container">
+      <p>
+        <label class="w3-text-blue"><b>First Name</b></label>
+        <input class="w3-input w3-border" name="first" type="text" id="first">
+      </p>
+      <p>
+        <label class="w3-text-blue"><b>Last Name</b></label>
+        <input class="w3-input w3-border" name="last" type="text" id="last">
+      </p>
+      <p>
+        <button class="w3-btn w3-blue" id="signup">Register</button>
+      </p>
+    </div>
+    `,
+    showCloseButton: true,
+    showConfirmButton: false,
+  })
+
+  var f = document.getElementById('first').value
+  var l = document.getElementById('last').value
+  document.getElementById('signup').addEventListener('click', () => {
+    let url = 'https://hexschool-tutorial.herokuapp.com/api/signup';
+    fetch(url, {
+      method: 'POST',
+      // headers 加入 json 格式
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // body 將 json 轉字串送出
+      body: JSON.stringify({
+        email: 'lovef1232e@hexschool.com',
+        password: '12345678'
+      })
+    }).then((response) => {
+        return response.json(); 
+      }).then((jsonData) => {
+        console.log(jsonData);
+      }).catch((err) => {
+        console.log('錯誤:', err);
+    })
+  })
+}
+
+function list(){
+  Swal.fire({
+    title: 'Shopping List',
+    icon: 'info',
+    html: `
+    <table class="w3-table-all w3-centered w3-hoverable w3-card-4" id="table">
+      <tr>
+        <th>Food</th>
+        <th>Amount</th>
+        <th>Price</th>
+      </tr>
+    </table>
+    `,
+    showCloseButton: true,
+    showCancelButton: true,
+    focusConfirm: false,
+    confirmButtonText: '<span class="fa fa-credit-card"></span>&nbsp;&nbsp;Pay',
+  }).then((result) => {
+    if(result.isConfirmed) {
+      if(cart.length != []){
+        Swal.fire('Saved!', '', 'success')
+      }else{
+        Swal.fire({
+          title: 'Shopping List Is Empty',
+          text: 'Let Go To Buy Somethings',
+          icon: 'error',
+          timer: 1800
+        })
+      }
+    }
+  })
+
+  var count = collectionRepeat(cart)
+  var table = document.getElementById('table')
+  var dataHtml = ''
+
+  for(var key of Object.keys(count)){
+    dataHtml += `
+      <tr>
+        <td>${key}</td>
+        <td>${count[key]}</td>
+        <td>${amountPrice(key, count[key])}</td>
+      </tr>
+    `
+  }
+
+  table.innerHTML += dataHtml
+}
+
+function add(e){
+  Swal.fire({
+    icon: 'success',
+    title: 'Add To Cart!',
+    timer: 1800
+  })
+  cart.push(e.target.id)
+}
+
+function del(e){
+  if(cart.length == 0)
+    return Swal.fire({
+      title: 'Shopping List Is Empty',
+      text: 'Let Go To Buy Somethings',
+      icon: 'error',
+      timer: 1800
+    })
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Delete From Cart',
+    timer: 1800
+  })
+  cart.splice(cart.indexOf(e.target.id), 1)
+}
+</script>
+
+</body>
+</html>
